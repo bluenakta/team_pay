@@ -1,28 +1,48 @@
 package show;
 
-import show.config.kafka.KafkaProcessor;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.stream.annotation.StreamListener;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Service;
 
+import show.config.kafka.KafkaProcessor;
+
 @Service
 public class PolicyHandler{
+	
+	@Autowired
+	PaymentRepository paymentRepository;
     
     @StreamListener(KafkaProcessor.INPUT)
     public void wheneverBooked_PaymentRequest(@Payload Booked booked){
 
         if(booked.isMe()){
-            System.out.println("##### listener PaymentRequest : " + booked.toJson());
+        	
+        	Payment payment = new Payment();
+        	payment.setBookId(booked.getId());
+//        	payment.setStatus("REQUESTED");
+        	payment.setStatus("PAYED");
+        	
+        	paymentRepository.save(payment);
+            
         }
     }
+    
     @StreamListener(KafkaProcessor.INPUT)
     public void wheneverBookingCanceled_PaymentCancel(@Payload BookingCanceled bookingCanceled){
 
         if(bookingCanceled.isMe()){
-            System.out.println("##### listener PaymentCancel : " + bookingCanceled.toJson());
+        	
+        	Payment paymentCanceled = paymentRepository.findByBookId(bookingCanceled.getId());
+        	paymentCanceled.setBookId(bookingCanceled.getId());
+        	paymentCanceled.setStatus("CANCELED");
+        	
+        	System.out.println("--------------------------------------------------------");
+        	System.out.println("paymentCanceled " + paymentCanceled.toString());
+        	System.out.println("--------------------------------------------------------");
+        	
+        	paymentRepository.delete(paymentCanceled);
+        	
         }
     }
 

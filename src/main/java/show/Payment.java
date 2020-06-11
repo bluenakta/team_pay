@@ -1,8 +1,14 @@
 package show;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.PostPersist;
+import javax.persistence.PreRemove;
+import javax.persistence.Table;
+
 import org.springframework.beans.BeanUtils;
-import java.util.List;
 
 @Entity
 @Table(name="Payment_table")
@@ -11,29 +17,32 @@ public class Payment {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
-    private Integer bookId;
+    private Long bookId;
     private String status;
-    private Integer amount;
 
-    @PreUpdate
-    public void onPreUpdate(){
+    
+    @PostPersist
+    public void onPostPersist(){
+    	
         Payed payed = new Payed();
         BeanUtils.copyProperties(this, payed);
-        payed.publishAfterCommit();
-
-
+//        payed.setStatus("PAYED"); ??
+        payed.publishAfterCommit();       
+        
     }
 
     @PreRemove
     public void onPreRemove(){
-        Canceled canceled = new Canceled();
-        BeanUtils.copyProperties(this, canceled);
-        canceled.publishAfterCommit();
+    	
+//        Canceled canceled = new Canceled();
+//        BeanUtils.copyProperties(this, canceled);
+//        canceled.publishAfterCommit();
 
         //Following code causes dependency to external APIs
         // it is NOT A GOOD PRACTICE. instead, Event-Policy mapping is recommended.
 
         show.external.TicketIssuance ticketIssuance = new show.external.TicketIssuance();
+        ticketIssuance.setId(this.bookId);
         // mappings goes here
         Application.applicationContext.getBean(show.external.TicketIssuanceService.class)
             .ticketIssue(ticketIssuance);
@@ -49,11 +58,11 @@ public class Payment {
     public void setId(Long id) {
         this.id = id;
     }
-    public Integer getBookId() {
+    public Long getBookId() {
         return bookId;
     }
 
-    public void setBookId(Integer bookId) {
+    public void setBookId(Long bookId) {
         this.bookId = bookId;
     }
     public String getStatus() {
@@ -63,15 +72,10 @@ public class Payment {
     public void setStatus(String status) {
         this.status = status;
     }
-    public Integer getAmount() {
-        return amount;
-    }
 
-    public void setAmount(Integer amount) {
-        this.amount = amount;
-    }
-
-
-
-
+	@Override
+	public String toString() {
+		return "Payment [" + (id != null ? "id=" + id + ", " : "") + (bookId != null ? "bookId=" + bookId + ", " : "")
+				+ (status != null ? "status=" + status : "") + "]";
+	}
 }

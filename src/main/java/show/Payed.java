@@ -3,7 +3,7 @@ package show;
 public class Payed extends AbstractEvent {
 
     private Long id;
-    private Integer bookId;
+    private Long bookId;
     private Integer amount;
     private String status;
 
@@ -18,11 +18,11 @@ public class Payed extends AbstractEvent {
     public void setId(Long id) {
         this.id = id;
     }
-    public Integer getBookId() {
+    public Long getBookId() {
         return bookId;
     }
 
-    public void setBookId(Integer bookId) {
+    public void setBookId(Long bookId) {
         this.bookId = bookId;
     }
     public Integer getAmount() {
