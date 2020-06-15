@@ -37,11 +37,8 @@ public class PolicyHandler{
         	paymentCanceled.setBookId(bookingCanceled.getId());
         	paymentCanceled.setStatus("CANCELED");
         	
-        	System.out.println("--------------------------------------------------------");
-        	System.out.println("paymentCanceled " + paymentCanceled.toString());
-        	System.out.println("--------------------------------------------------------");
-        	
-        	paymentRepository.delete(paymentCanceled);
+//        	paymentRepository.delete(paymentCanceled);
+        	paymentRepository.save(paymentCanceled);
         	
         }
     }

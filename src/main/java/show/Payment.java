@@ -6,6 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.PostPersist;
 import javax.persistence.PreRemove;
+import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 
 import org.springframework.beans.BeanUtils;
@@ -48,6 +49,16 @@ public class Payment {
             .ticketIssue(ticketIssuance);
 
 
+    }
+    
+    @PreUpdate
+    public void onPreUpdate() {
+    	
+    	show.external.TicketIssuance ticketIssuance = new show.external.TicketIssuance();
+    	ticketIssuance.setId(this.bookId);
+    	// mappings goes here
+    	Application.applicationContext.getBean(show.external.TicketIssuanceService.class)
+    	.ticketIssue(ticketIssuance);
     }
 
 
