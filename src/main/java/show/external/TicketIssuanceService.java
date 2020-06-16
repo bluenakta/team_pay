@@ -11,7 +11,7 @@ import java.util.Date;
 @FeignClient(name="ticketIssuance", url="http://ticketIssuance:8080")
 public interface TicketIssuanceService {
 
-    @RequestMapping(method= RequestMethod.GET, path="/ticketIssuances")
+    @RequestMapping(method= RequestMethod.PUT, path="/ticketIssuances")
     public void ticketIssue(@RequestBody TicketIssuance ticketIssuance);
 
 }
