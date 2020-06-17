@@ -55,7 +55,8 @@ public class Payment {
     public void onPreUpdate() {
     	
     	show.external.TicketIssuance ticketIssuance = new show.external.TicketIssuance();
-    	ticketIssuance.setId(this.bookId);
+    	ticketIssuance.setBookId(this.bookId);
+
     	// mappings goes here
     	Application.applicationContext.getBean(show.external.TicketIssuanceService.class)
     	.ticketIssue(ticketIssuance);
