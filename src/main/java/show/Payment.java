@@ -28,7 +28,7 @@ public class Payment {
         Payed payed = new Payed();
         BeanUtils.copyProperties(this, payed);
 //        payed.setStatus("PAYED"); ??
-        payed.publishAfterCommit();       
+        payed.publishAfterCommit();
         
     }
 
@@ -43,7 +43,8 @@ public class Payment {
         // it is NOT A GOOD PRACTICE. instead, Event-Policy mapping is recommended.
 
         show.external.TicketIssuance ticketIssuance = new show.external.TicketIssuance();
-        ticketIssuance.setId(this.bookId);
+        ticketIssuance.setBookId(this.bookId);
+        ticketIssuance.setIssueStatus(this.status);
         // mappings goes here
         Application.applicationContext.getBean(show.external.TicketIssuanceService.class)
             .ticketIssue(ticketIssuance);
@@ -56,6 +57,7 @@ public class Payment {
     	
     	show.external.TicketIssuance ticketIssuance = new show.external.TicketIssuance();
     	ticketIssuance.setBookId(this.bookId);
+        ticketIssuance.setIssueStatus(this.status);
 
     	// mappings goes here
     	Application.applicationContext.getBean(show.external.TicketIssuanceService.class)
