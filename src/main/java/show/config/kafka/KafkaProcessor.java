@@ -7,13 +7,19 @@ import org.springframework.messaging.SubscribableChannel;
 
 public interface KafkaProcessor {
 
-    String INPUT = "event-in";
-    String OUTPUT = "event-out";
+     String INPUT_1 = "event-in1";
+     String INPUT_2 = "event-in2";
+     String OUTPUT_1 = "event-out1";
 
-    @Input(INPUT)
-    SubscribableChannel inboundTopic();
 
-    @Output(OUTPUT)
-    MessageChannel outboundTopic();
+     @Input(INPUT_1)
+     SubscribableChannel inboundTopic1();
+
+     @Input(INPUT_2)
+     SubscribableChannel inboundTopic2();
+
+     @Output(OUTPUT_1)
+     MessageChannel outboundTopic1();
+
 
 }

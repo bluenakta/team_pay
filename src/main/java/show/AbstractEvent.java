@@ -44,7 +44,7 @@ public class AbstractEvent {
              * spring streams 방식
              */
             KafkaProcessor processor = Application.applicationContext.getBean(KafkaProcessor.class);
-            MessageChannel outputChannel = processor.outboundTopic();
+            MessageChannel outputChannel = processor.outboundTopic1();
 
             outputChannel.send(MessageBuilder
                     .withPayload(json)
@@ -59,6 +59,26 @@ public class AbstractEvent {
     }
 
     public void publishAfterCommit(){
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
+
+            @Override
+            public void afterCompletion(int status) {
+                AbstractEvent.this.publish();
+            }
+        });
+    }
+
+    public void publishAfterCommitPayed(){
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
+
+            @Override
+            public void afterCompletion(int status) {
+                AbstractEvent.this.publish();
+            }
+        });
+    }
+
+    public void publishAfterCommitCanceled(){
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronizationAdapter() {
 
             @Override
