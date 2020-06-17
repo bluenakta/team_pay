@@ -13,7 +13,7 @@ public class PolicyHandler{
 	@Autowired
 	PaymentRepository paymentRepository;
     
-    @StreamListener(KafkaProcessor.INPUT)
+    @StreamListener(KafkaProcessor.INPUT_1)
     public void wheneverBooked_PaymentRequest(@Payload Booked booked){
 
         if(booked.isMe()){
@@ -28,7 +28,7 @@ public class PolicyHandler{
         }
     }
     
-    @StreamListener(KafkaProcessor.INPUT)
+    @StreamListener(KafkaProcessor.INPUT_2)
     public void wheneverBookingCanceled_PaymentCancel(@Payload BookingCanceled bookingCanceled){
 
         if(bookingCanceled.isMe()){
