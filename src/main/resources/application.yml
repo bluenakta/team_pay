@@ -27,7 +27,7 @@ spring:
           destination: booked
           contentType: application/json
         event-in2:
-          destination: bookingCanceled
+          destination: bookingCancelled
           contentType: application/json  
         event-out1:
           destination: payed
@@ -39,6 +39,24 @@ logging:
     org.springframework.cloud: debug
 server:
   port: 8083
+
+feign:
+  hystrix:
+    enabled: true
+
+# To set thread isolation to SEMAPHORE
+#hystrix:
+#  command:
+#    default:
+#      execution:
+#        isolation:
+#          strategy: SEMAPHORE
+
+hystrix:
+  command:
+    # 전역설정
+    default:
+      execution.isolation.thread.timeoutInMilliseconds: 610
 ---
 
 spring:
